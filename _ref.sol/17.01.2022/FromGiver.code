@@ -1,0 +1,654 @@
+.version sol 0.54.0
+
+.macro constructor
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+GETGLOB 6
+THROWIF 51
+ENDS
+.loc FromGiver.sol, 62
+GETGLOB 9
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+SDEQ
+THROWIF 117
+.loc FromGiver.sol, 63
+GETGLOB 9
+GETGLOB 11
+SDEQ
+THROWIFNOT 107
+.loc FromGiver.sol, 67
+PUSHINT 0
+SETGLOB 10
+.loc FromGiver.sol, 68
+FALSE
+SETGLOB 15
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro initialize
+DROP
+GETGLOB 6
+THROWIFNOT 76
+.loc FromGiver.sol, 71
+ENDS
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $initialize_internal_macro$
+}
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.macro initialize_internal_macro
+.loc FromGiver.sol, 74
+THROW 118
+.loc FromGiver.sol, 0
+
+.macro receive_macro
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc FromGiver.sol, 80
+MYADDR
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+PUSHINT 5000000000
+GREATER
+PUSHCONT {
+	.loc FromGiver.sol, 81
+	GETGLOB 9
+	GETGLOB 14
+	SDEQ
+	THROWIFNOT 119
+	.loc FromGiver.sol, 82
+	NOW
+	GETGLOB 12
+	LESS
+	THROWIFNOT 103
+	.loc FromGiver.sol, 83
+	GETPARAM 7
+	FIRST
+	DEPTH
+	ADDCONST -2
+	PICK
+	GETGLOB 10
+	ADD
+	UFITS 128
+	PUSHINT 500000000
+	ADD
+	UFITS 128
+	PUSHINT 500000000
+	ADD
+	UFITS 128
+	GREATER
+	THROWIFNOT 102
+	.loc FromGiver.sol, 87
+	ACCEPT
+	.loc FromGiver.sol, 88
+	GETGLOB 14
+	DEPTH
+	ADDCONST -2
+	PICK
+	GETGLOB 10
+	GETGLOB 11
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	PUSHSLICE x41dcd6500000000000000000000000000003_
+	STSLICER
+	ROLLREV 3
+	NEWC
+	STSLICECONST x2e2ed03c
+	STU 256
+	STU 128
+	STSLICE
+	STBREFR
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc FromGiver.sol, 89
+	GETPARAM 7
+	FIRST
+	GETGLOB 10
+	ADD
+	UFITS 128
+	SETGLOB 10
+	.loc FromGiver.sol, 0
+}
+IF
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $c7_to_c4$
+}
+
+.macro notifyParticipant
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc FromGiver.sol, 93
+LDU 128
+LDU 128
+ENDS
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $notifyParticipant_internal_macro$
+}
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro notifyParticipant_internal_macro
+.loc FromGiver.sol, 95
+GETGLOB 9
+GETGLOB 11
+SDEQ
+THROWIFNOT 119
+.loc FromGiver.sol, 96
+NOW
+GETGLOB 12
+GEQ
+NOW
+GETGLOB 13
+LEQ
+AND
+THROWIFNOT 108
+.loc FromGiver.sol, 97
+GETGLOB 15
+THROWIF 109
+.loc FromGiver.sol, 98
+GETGLOB 10
+GTINT 0
+THROWIFNOT 2
+.loc FromGiver.sol, 99
+GETPARAM 7
+FIRST
+DEPTH
+ADDCONST -2
+PICK
+GETGLOB 10
+ADD
+UFITS 128
+PUSHINT 500000000
+ADD
+UFITS 128
+GEQ
+THROWIFNOT 102
+.loc FromGiver.sol, 102
+ACCEPT
+.loc FromGiver.sol, 103
+TRUE
+SETGLOB 15
+.loc FromGiver.sol, 104
+PUSH2 S0, S1
+GREATER
+PUSHCONT {
+	.loc FromGiver.sol, 106
+	GETGLOB 10
+	PUSH2 S1, S2
+	SUB
+	UFITS 128
+	MUL
+	UFITS 128
+	OVER
+	DIV
+	.loc FromGiver.sol, 107
+	GETGLOB 10
+	OVER
+	SUB
+	UFITS 128
+	SETGLOB 10
+	.loc FromGiver.sol, 108
+	GETGLOB 14
+	NEWC
+	STSLICECONST x62_
+	STSLICE
+	SWAP
+	STGRAMS
+	PUSHINT 107
+	STZEROES
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc FromGiver.sol, 0
+}
+IF
+.loc FromGiver.sol, 110
+DROP2
+GETGLOB 11
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHINT 1
+STUR 111
+GETGLOB 14
+NEWC
+STSLICECONST x7a63f56e
+STSLICE
+STBREFR
+ENDC
+PUSHINT 64
+SENDRAWMSG
+.loc FromGiver.sol, 0
+
+.globl	_sendFunds_internal
+.type	_sendFunds_internal, @function
+CALL $_sendFunds_internal_macro$
+
+.macro _sendFunds_internal_macro
+.loc FromGiver.sol, 115
+GETGLOB 10
+GTINT 0
+PUSHCONT {
+	.loc FromGiver.sol, 117
+	GETGLOB 10
+	OVER
+	NEWC
+	STSLICECONST x42_
+	STSLICE
+	SWAP
+	STGRAMS
+	PUSHINT 107
+	STZEROES
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+	.loc FromGiver.sol, 0
+}
+IF
+.loc FromGiver.sol, 119
+DROP
+GETGLOB 14
+NEWC
+STSLICECONST x42_
+STSLICE
+PUSHINT 111
+STZEROES
+ENDC
+PUSHINT 160
+SENDRAWMSG
+.loc FromGiver.sol, 0
+
+.macro sendFunds
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc FromGiver.sol, 123
+OVER
+PUSHCONT {
+	LDREF
+	ENDS
+	CTOS
+}
+IF
+LDMSGADDR
+ENDS
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $sendFunds_internal_macro$
+}
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.macro sendFunds_internal_macro
+.loc FromGiver.sol, 125
+GETGLOB 9
+GETGLOB 11
+SDEQ
+THROWIFNOT 107
+.loc FromGiver.sol, 126
+GETGLOB 15
+THROWIFNOT 112
+.loc FromGiver.sol, 128
+GETPARAM 7
+FIRST
+MYADDR
+PARSEMSGADDR
+INDEX 3
+PLDU 256
+GETGLOB 10
+ADD
+PUSHINT 500000000
+ADD
+GEQ
+THROWIFNOT 102
+.loc FromGiver.sol, 129
+ACCEPT
+.loc FromGiver.sol, 130
+CALLREF {
+	CALL $_sendFunds_internal_macro$
+}
+.loc FromGiver.sol, 0
+
+.macro returnFunds
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc FromGiver.sol, 133
+ENDS
+.loc FromGiver.sol, 0
+CALLREF {
+	CALL $returnFunds_internal_macro$
+}
+DROP
+CALLREF {
+	CALL $c7_to_c4$
+}
+THROW 0
+
+.globl	returnFunds_internal
+.type	returnFunds_internal, @function
+CALL $returnFunds_internal_macro$
+
+.macro returnFunds_internal_macro
+.loc FromGiver.sol, 135
+NOW
+GETGLOB 13
+GREATER
+THROWIFNOT 113
+.loc FromGiver.sol, 136
+GETPARAM 7
+FIRST
+PUSHINT 500000000
+GEQ
+THROWIFNOT 102
+.loc FromGiver.sol, 137
+ACCEPT
+.loc FromGiver.sol, 138
+GETGLOB 14
+CALLREF {
+	CALL $_sendFunds_internal_macro$
+}
+.loc FromGiver.sol, 0
+
+.macro c4_to_c7
+PUSHROOT
+CTOS
+LDU 256 ; pubkey c4
+LDU 64 ; pubkey timestamp c4
+LDU 1 ; ctor flag
+NIP
+LDU 128
+LDREF
+ENDS
+CTOS
+LDMSGADDR
+LDU 256
+LDREF
+ENDS
+CTOS
+LDU 256
+LDMSGADDR
+LDI 1
+ENDS
+SETGLOB 15
+SETGLOB 14
+SETGLOB 13
+SETGLOB 12
+SETGLOB 11
+SETGLOB 10
+SETGLOB 3
+SETGLOB 2
+
+.macro c4_to_c7_with_init_storage
+PUSHROOT
+CTOS
+SBITS
+GTINT 1
+PUSHCONT {
+	PUSHINT 0
+	PUSHROOT
+	CTOS
+	PLDDICT ; D
+	PUSHINT 0
+	SETGLOB 10
+	PUSHINT 1
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	IFNOT
+	SETGLOB 11
+	PUSHINT 2
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PLDU 256
+	}
+	PUSHCONT {
+		PUSHINT 0
+	}
+	IFELSE
+	SETGLOB 12
+	PUSHINT 3
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PLDU 256
+	}
+	PUSHCONT {
+		PUSHINT 0
+	}
+	IFELSE
+	SETGLOB 13
+	PUSHINT 4
+	OVER
+	PUSHINT 64
+	DICTUGET
+	PUSHCONT {
+		PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+	}
+	IFNOT
+	SETGLOB 14
+	PUSHINT 0
+	SETGLOB 15
+	PUSHINT 64
+	DICTUGET
+	THROWIFNOT 61
+	PLDU 256
+	SETGLOB 2
+	PUSHINT 0 ; timestamp
+	SETGLOB 3
+}
+IFREFELSE {
+	CALL $c4_to_c7$
+}
+
+.macro c7_to_c4
+GETGLOB 15
+GETGLOB 14
+GETGLOB 13
+GETGLOB 12
+GETGLOB 11
+GETGLOB 10
+GETGLOB 3
+GETGLOB 2
+NEWC
+STU 256
+STU 64
+STONE
+STU 128
+ROLLREV 5
+NEWC
+STSLICE
+STU 256
+ROLLREV 3
+NEWC
+STU 256
+STSLICE
+STI 1
+STBREFR
+STBREFR
+ENDC
+POPROOT
+
+.macro upd_only_time_in_c4
+PUSHROOT
+CTOS
+LDU 256
+LDU 64
+NIP
+GETGLOB 3
+ROT
+NEWC
+STU 256
+STU 64
+STSLICE
+ENDC
+POPROOT
+
+.internal-alias :main_internal, 0
+.internal :main_internal
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSH S2
+CTOS
+LDU 4 ; bounced tail
+LDMSGADDR ; bounced src tail
+DROP
+SETGLOB 9
+MODPOW2 1
+IFRET
+OVER
+SEMPTY ; isEmpty
+DUP
+PUSHCONT {
+	DROP
+	OVER
+	LDUQ 32  ; [funcId] body' ok
+	THROWIFNOT 60
+	OVER
+	EQINT 0 ; funcId body' isZero
+	DUP
+	PUSHCONT {
+		BLKDROP2 2, 1
+	}
+	IF
+}
+IFNOT
+IFJMPREF {
+	CALL $receive_macro$
+}
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.internal-alias :main_external, -1
+.internal :main_external
+PUSHROOT
+CTOS
+SBITS
+NEQINT 1
+SETGLOB 6
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+SETGLOB 9
+OVER
+CALLREF {
+	CALL $c4_to_c7_with_init_storage$
+}
+LDU 1 ; haveSign msgSlice
+SWAP
+PUSHCONT {
+	PUSHINT 512
+	LDSLICEX ; signatureSlice msgSlice
+	DUP
+	HASHSU ; signatureSlice msgSlice hashMsgSlice
+	ROT
+	GETGLOB 2
+	CHKSIGNU ; msgSlice isSigned
+	THROWIFNOT 40
+}
+IF
+LDU 64 ; timestamp msgSlice
+SWAP
+CALL $replay_protection_macro$
+LDU 32 ; expireAt msgSlice
+SWAP
+NOW ; msgSlice expireAt now
+GREATER ; msgSlice expireAt>now
+THROWIFNOT 57
+LDU 32 ; funcId body
+SWAP
+CALLREF {
+	CALL $public_function_selector$
+}
+THROW 60
+
+.macro public_function_selector
+DUP
+PUSHINT 1756716863
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 923404724
+	EQUAL
+	IFJMPREF {
+		CALL $sendFunds$
+	}
+	DUP
+	PUSHINT 1062214677
+	EQUAL
+	IFJMPREF {
+		CALL $returnFunds$
+	}
+	DUP
+	PUSHINT 1689814487
+	EQUAL
+	IFJMPREF {
+		CALL $initialize$
+	}
+	DUP
+	PUSHINT 1756716863
+	EQUAL
+	IFJMPREF {
+		CALL $constructor$
+	}
+}
+DUP
+PUSHINT 1906008630
+EQUAL
+IFJMPREF {
+	CALL $notifyParticipant$
+}
+

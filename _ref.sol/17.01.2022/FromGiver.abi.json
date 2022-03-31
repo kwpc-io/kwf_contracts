@@ -1,0 +1,64 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "initialize",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyParticipant",
+			"inputs": [
+				{"name":"summa_investors","type":"uint128"},
+				{"name":"summa_givers","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendFunds",
+			"inputs": [
+				{"name":"address_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnFunds",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"fund_address_","type":"address"},
+		{"key":2,"name":"lock_time_","type":"uint256"},
+		{"key":3,"name":"unlock_time_","type":"uint256"},
+		{"key":4,"name":"giver_address_","type":"address"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"balance_","type":"uint128"},
+		{"name":"fund_address_","type":"address"},
+		{"name":"lock_time_","type":"uint256"},
+		{"name":"unlock_time_","type":"uint256"},
+		{"name":"giver_address_","type":"address"},
+		{"name":"fund_ready_flag_","type":"bool"}
+	]
+}

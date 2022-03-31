@@ -1,0 +1,6 @@
+(coq.theory
+ (name KWproject)
+ (package pruvendo-kw-project) 
+)
+
+(include_subdirs qualified)

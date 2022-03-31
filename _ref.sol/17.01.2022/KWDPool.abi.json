@@ -1,0 +1,79 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"final_address","type":"optional(address)"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "initialize",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyParticipant",
+			"inputs": [
+				{"name":"summa_investors","type":"uint128"},
+				{"name":"summa_givers","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFinalAddress",
+			"inputs": [
+				{"name":"final_address","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendFunds",
+			"inputs": [
+				{"name":"address_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnFunds",
+			"inputs": [
+				{"name":"address_to","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"fund_address_","type":"address"},
+		{"key":2,"name":"lock_time_","type":"uint256"},
+		{"key":3,"name":"unlock_time_","type":"uint256"},
+		{"key":4,"name":"farm_rate_","type":"uint128"},
+		{"key":5,"name":"quant_","type":"uint128"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"balance_","type":"uint128"},
+		{"name":"fund_address_","type":"address"},
+		{"name":"lock_time_","type":"uint256"},
+		{"name":"unlock_time_","type":"uint256"},
+		{"name":"farm_rate_","type":"uint128"},
+		{"name":"final_address_","type":"optional(address)"},
+		{"name":"quant_","type":"uint128"},
+		{"name":"voting_flag_","type":"bool"},
+		{"name":"fund_ready_flag_","type":"bool"},
+		{"name":"initialized_","type":"bool"}
+	]
+}

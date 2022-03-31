@@ -1,0 +1,32 @@
+synopsis:     "Pruvendo kw FreeTON project verificaton"
+description:  "Pruvendo kw FreeTON project verificaton"
+name:         "pruvendo-kw-project"
+opam-version: "2.0"
+maintainer:   "team@pruvendo.com"
+authors:      "Pruvendo Team"
+homepage:     "git://git@vcs.modus-ponens.com:ton/pruvendo-kw-project.git"
+dev-repo:     "git+https://github.com/Pruvendo/opam-repo.git"
+bug-reports:  "git://git@vcs.modus-ponens.com:ton/pruvendo-kw-project.git"
+doc:          "https://pruvendo.github.io/pruvendo-kw-project"
+
+license:      "GPL 3"
+
+depends: [
+  "coq"           { >= "8.11.0" }
+  "dune"          { >= "2.8.0"  }
+  "pruvendo-base" { >= "0.2.0" }
+  "pruvendo-base-lib" { >= "0.1.0" }
+  "pruvendo-umlang" 
+  "ursus-standard-library"
+  "pruvendo-ursus-tvm"
+]
+
+pin-depends: [
+  [ "pruvendo-base.latest-git" "../coq-finproof-base#master" ]
+  [ "pruvendo-base-lib.latest-git" "../pruvendo-base-lib#master" ]
+  [ "pruvendo-umlang.latest-git" "../solidity-monadic-language#master" ]
+  [ "ursus-standard-library.latest-git" "../ursus-standard-library#master" ]  
+  [ "pruvendo-ursus-tvm.latest-git" "../pruvendo-ursus-tvm#master" ]  
+]
+
+build: [ "dune" "build" "-p" name "-j" jobs ]

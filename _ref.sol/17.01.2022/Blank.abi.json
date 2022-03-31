@@ -1,0 +1,129 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"min_summa","type":"uint128"},
+				{"name":"max_summa","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFromGiverCode",
+			"inputs": [
+				{"name":"code_hash","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setKWDPoolCodeHash",
+			"inputs": [
+				{"name":"code_hash","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "isFundReady",
+			"inputs": [
+				{"name":"quant","type":"uint128"},
+				{"name":"pk","type":"uint256"},
+				{"name":"rate","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyLeft",
+			"inputs": [
+				{"name":"balance","type":"uint128"},
+				{"name":"quant","type":"uint128"},
+				{"name":"pk","type":"uint256"},
+				{"name":"rate","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployFromGiver",
+			"inputs": [
+				{"name":"code","type":"cell"},
+				{"name":"giver","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "notifyRight",
+			"inputs": [
+				{"name":"income","type":"uint128"},
+				{"name":"giver","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acknowledgeFinalizeLeft",
+			"inputs": [
+				{"name":"quant","type":"uint128"},
+				{"name":"pk","type":"uint256"},
+				{"name":"rate","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acknowledgeFinalizeRight",
+			"inputs": [
+				{"name":"giver","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "finalize",
+			"inputs": [
+				{"name":"addr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFundCode",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"lock_time_","type":"uint256"},
+		{"key":2,"name":"unlock_time_","type":"uint256"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"kwdpool_code_hash_","type":"uint256"},
+		{"name":"fromgiver_code_hash_","type":"uint256"},
+		{"name":"givers_summa_","type":"uint128"},
+		{"name":"investors_summa_","type":"uint128"},
+		{"name":"min_summa_","type":"uint128"},
+		{"name":"max_summa_","type":"uint128"},
+		{"name":"lock_time_","type":"uint256"},
+		{"name":"unlock_time_","type":"uint256"},
+		{"name":"num_investors_sent_","type":"uint256"},
+		{"name":"num_investors_received_","type":"uint256"},
+		{"name":"can_change_kwdpool_code_","type":"bool"},
+		{"name":"can_change_fromgiver_code_","type":"bool"}
+	]
+}
