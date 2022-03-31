@@ -1,0 +1,94 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"lock_time","type":"uint32"},
+				{"name":"unlock_time","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "initialize",
+			"inputs": [
+				{"name":"value0","type":"uint32"},
+				{"name":"value1","type":"uint32"},
+				{"name":"value2","type":"uint128"},
+				{"name":"value3","type":"uint8"},
+				{"name":"value4","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyParticipant",
+			"inputs": [
+				{"name":"giveup","type":"bool"},
+				{"name":"investors_adj_summa_","type":"uint128"},
+				{"name":"summa_givers","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acknowledgeFunds",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendFunds",
+			"inputs": [
+				{"name":"value0","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnFunds",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onVoteReject",
+			"inputs": [
+				{"name":"voting_id","type":"uint8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onVoteAccept",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"fund_address_","type":"address"},
+		{"key":2,"name":"giver_address_","type":"address"},
+		{"key":3,"name":"nonce_","type":"uint256"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"balance_","type":"uint128"},
+		{"name":"fund_address_","type":"address"},
+		{"name":"lock_time_","type":"uint32"},
+		{"name":"unlock_time_","type":"uint32"},
+		{"name":"giver_address_","type":"address"},
+		{"name":"fund_ready_flag_","type":"bool"},
+		{"name":"nonce_","type":"uint256"}
+	]
+}

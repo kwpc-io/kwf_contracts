@@ -1,0 +1,366 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"min_summa","type":"uint128"},
+				{"name":"max_summa","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFromGiverCodeHash",
+			"inputs": [
+				{"name":"code_hash","type":"uint256"},
+				{"name":"code_depth","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setKWDPoolCodeHash",
+			"inputs": [
+				{"name":"code_hash","type":"uint256"},
+				{"name":"code_depth","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "isFundReady",
+			"inputs": [
+				{"name":"pk","type":"uint256"},
+				{"name":"nonce","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyLeft",
+			"inputs": [
+				{"name":"pk","type":"uint256"},
+				{"name":"nonce","type":"uint256"},
+				{"name":"balance","type":"uint128"},
+				{"name":"adj_balance","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployFromGiver",
+			"inputs": [
+				{"name":"code","type":"cell"},
+				{"name":"giver","type":"address"},
+				{"name":"nonce","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "acknowledgeDeploy",
+			"inputs": [
+				{"name":"giver","type":"address"},
+				{"name":"nonce","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "notifyRight",
+			"inputs": [
+				{"name":"giver","type":"address"},
+				{"name":"nonce","type":"uint256"},
+				{"name":"balance","type":"uint128"},
+				{"name":"income","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acknowledgeFinalizeLeft",
+			"inputs": [
+				{"name":"pk","type":"uint256"},
+				{"name":"nonce","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acknowledgeFinalizeRight",
+			"inputs": [
+				{"name":"giver","type":"address"},
+				{"name":"nonce","type":"uint256"},
+				{"name":"dead_giver","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "finalize",
+			"inputs": [
+				{"name":"force_giveup","type":"bool"},
+				{"name":"addr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setFundCode",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "vote",
+			"inputs": [
+				{"name":"pk","type":"uint256"},
+				{"name":"nonce","type":"uint256"},
+				{"name":"choice","type":"bool"},
+				{"name":"sum","type":"uint128"},
+				{"name":"voting_id","type":"uint8"},
+				{"name":"code_hash","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "startVoting",
+			"inputs": [
+				{"name":"voting_time","type":"uint32"},
+				{"name":"code_hash","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "killBlank",
+			"inputs": [
+				{"name":"address_to","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getInvestorsSum",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"},
+				{"name":"value1","type":"uint128"}
+			]
+		},
+		{
+			"name": "getGiversSum",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "getInvestorsNumbers",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"},
+				{"name":"value1","type":"uint256"}
+			]
+		},
+		{
+			"name": "getTimes",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"},
+				{"name":"value1","type":"uint256"},
+				{"name":"value2","type":"uint256"}
+			]
+		},
+		{
+			"name": "kwdpool_code_hash_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"kwdpool_code_hash_","type":"uint256"}
+			]
+		},
+		{
+			"name": "kwdpool_code_depth_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"kwdpool_code_depth_","type":"uint16"}
+			]
+		},
+		{
+			"name": "fromgiver_code_hash_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"fromgiver_code_hash_","type":"uint256"}
+			]
+		},
+		{
+			"name": "fromgiver_code_depth_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"fromgiver_code_depth_","type":"uint16"}
+			]
+		},
+		{
+			"name": "givers_summa_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"givers_summa_","type":"uint128"}
+			]
+		},
+		{
+			"name": "investors_adj_summa_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"investors_adj_summa_","type":"uint128"}
+			]
+		},
+		{
+			"name": "investors_summa_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"investors_summa_","type":"uint128"}
+			]
+		},
+		{
+			"name": "min_summa_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"min_summa_","type":"uint128"}
+			]
+		},
+		{
+			"name": "max_summa_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"max_summa_","type":"uint128"}
+			]
+		},
+		{
+			"name": "lock_time_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"lock_time_","type":"uint32"}
+			]
+		},
+		{
+			"name": "unlock_time_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"unlock_time_","type":"uint32"}
+			]
+		},
+		{
+			"name": "farm_rate_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"farm_rate_","type":"uint8"}
+			]
+		},
+		{
+			"name": "kwf_lock_time_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"kwf_lock_time_","type":"uint32"}
+			]
+		},
+		{
+			"name": "quant_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"quant_","type":"uint128"}
+			]
+		},
+		{
+			"name": "nonce_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nonce_","type":"uint256"}
+			]
+		},
+		{
+			"name": "voting_id_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"voting_id_","type":"uint8"}
+			]
+		},
+		{
+			"name": "code_updated",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"code_updated","type":"bool"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"lock_time_","type":"uint32"},
+		{"key":2,"name":"unlock_time_","type":"uint32"},
+		{"key":3,"name":"farm_rate_","type":"uint8"},
+		{"key":4,"name":"kwf_lock_time_","type":"uint32"},
+		{"key":5,"name":"quant_","type":"uint128"},
+		{"key":6,"name":"nonce_","type":"uint256"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"kwdpool_code_hash_","type":"uint256"},
+		{"name":"kwdpool_code_depth_","type":"uint16"},
+		{"name":"fromgiver_code_hash_","type":"uint256"},
+		{"name":"fromgiver_code_depth_","type":"uint16"},
+		{"name":"givers_summa_","type":"uint128"},
+		{"name":"investors_adj_summa_","type":"uint128"},
+		{"name":"investors_summa_","type":"uint128"},
+		{"name":"min_summa_","type":"uint128"},
+		{"name":"max_summa_","type":"uint128"},
+		{"name":"lock_time_","type":"uint32"},
+		{"name":"unlock_time_","type":"uint32"},
+		{"name":"farm_rate_","type":"uint8"},
+		{"name":"kwf_lock_time_","type":"uint32"},
+		{"name":"quant_","type":"uint128"},
+		{"name":"nonce_","type":"uint256"},
+		{"name":"num_investors_sent_","type":"uint32"},
+		{"name":"num_investors_received_","type":"uint32"},
+		{"name":"can_change_kwdpool_code_","type":"bool"},
+		{"name":"can_change_fromgiver_code_","type":"bool"},
+		{"name":"num_from_givers_","type":"uint32"},
+		{"name":"voted_for_","type":"uint128"},
+		{"name":"voted_against_","type":"uint128"},
+		{"name":"voting_start_time_","type":"uint32"},
+		{"name":"voting_time_","type":"uint32"},
+		{"name":"voting_result_","type":"optional(bool)"},
+		{"name":"voting_code_hash_","type":"uint256"},
+		{"name":"voting_id_","type":"uint8"},
+		{"name":"code_updated","type":"bool"}
+	]
+}
