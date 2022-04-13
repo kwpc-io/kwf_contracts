@@ -5,7 +5,8 @@ import os
 
 from tonclient.types import Abi, AbiContract, CallSet, KeyPair, NetworkConfig,\
     Signer, ParamsOfEncodeMessage, ParamsOfProcessMessage, ParamsOfGetCodeFromTvc,\
-    ParamsOfGetBocHash, ParamsOfDecodeAccountData, ParamsOfQueryCollection
+    ParamsOfGetBocHash, ParamsOfDecodeAccountData, ParamsOfQueryCollection,\
+    ParamsOfGetBocDepth
 from tonclient.types import ClientConfig
 from tonclient.client import TonClient
 
@@ -90,12 +91,20 @@ async def get_contract_code(file_path: str):
     return result.code
 
 
-async def get_contract_code_hash(file_path: str) -> int:
+async def get_contract_code_hash(file_path: str) -> str:
     code = await get_contract_code(file_path)
     result = await client.boc.get_boc_hash(
         params=ParamsOfGetBocHash(boc=code))
     contract_hash = result.hash
-    return contract_hash
+    return '0x' + contract_hash
+
+
+async def get_contract_code_depth(file_path: str) -> int:
+    code = await get_contract_code(file_path)
+    result = await client.boc.get_boc_depth(
+        params=ParamsOfGetBocDepth(boc=code))
+    contract_depth = result.depth
+    return contract_depth
 
 
 async def decode_account_data(data: str, file_path: str):

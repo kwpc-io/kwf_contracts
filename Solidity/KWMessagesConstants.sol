@@ -6,8 +6,9 @@ uint128 constant BLANK_MIN_BALANCE = 20 ton ;
 uint128 constant RESPAWN_BALANCE = 50 ton;
 uint128 constant EPSILON_BALANCE = 0.5 ton ;
 uint128 constant GAS_FOR_PARTICIPANT_MESSAGE = 0.5 ton ;
+uint16 constant MAX_FARM_RATE = 1000 ;
 
-uint128 constant KWD_MIN_BALANCE = 5 ton ;
+uint128 constant KWD_MIN_BALANCE = 10 ton ;
 uint128 constant GAS_FOR_FUND_MESSAGE = 0.5 ton ;
 
 uint128 constant FG_MIN_BALANCE = 5 ton ;

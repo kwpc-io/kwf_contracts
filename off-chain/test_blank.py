@@ -17,6 +17,7 @@ from conftest import ERRORS
 async def test_blank_deploy(
     create_and_deploy, fetch_recent_transactions, contract_code_hash,
     lock_time_shift, unlock_time_shift, kwf_lock_time_shift,
+    contract_code_depth,
 ):
     now = int(time.time())  # seconds
 
@@ -57,6 +58,10 @@ async def test_blank_deploy(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), './Solidity'),
         'Blank',
         statics=statics,
+        deploy_kwargs={
+            'min_summa': 0,
+            'max_summa': 50,
+        },
     )
 
     txs = await fetch_recent_transactions(deploy_timestamp)
@@ -67,11 +72,14 @@ async def test_blank_deploy(
         return
     
     from_giver_code_hash = await contract_code_hash(CONTRACTS_BASE_DIR, 'FromGiver.tvc')
+    from_giver_code_depth = await contract_code_depth(CONTRACTS_BASE_DIR, 'FromGiver.tvc')
     kwd_pool_code_hash = await contract_code_hash(CONTRACTS_BASE_DIR, 'KWDPool.tvc')
+    kwd_pool_code_depth = await contract_code_depth(CONTRACTS_BASE_DIR, 'KWDPool.tvc')
+
 
     before_set_from_giver_code = int(time.time())
 
-    await blank.setFromGiverCode(from_giver_code_hash)
+    await blank.setFromGiverCode(from_giver_code_hash, from_giver_code_depth)
 
     txs = await fetch_recent_transactions(before_set_from_giver_code)
     tx = txs[-1]
@@ -79,7 +87,7 @@ async def test_blank_deploy(
 
     before_set_kwd_pool_code_hash = int(time.time())
 
-    await blank.setKWDPoolCodeHash(kwd_pool_code_hash)
+    await blank.setKWDPoolCodeHash(kwd_pool_code_hash, kwd_pool_code_depth)
 
     txs = await fetch_recent_transactions(before_set_from_giver_code)
     tx = txs[-1]
@@ -92,7 +100,7 @@ async def test_blank_deploy(
 @pytest.mark.parametrize('nonce', [0, 10])
 async def test_blank_deploy_correct_times(
     create_and_deploy, fetch_recent_transactions, contract_code_hash,
-    farm_rate, quant, nonce,
+    farm_rate, quant, nonce, contract_code_depth,
 ):
     now = int(time.time())  # seconds
 
@@ -124,6 +132,11 @@ async def test_blank_deploy_correct_times(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), './Solidity'),
         'Blank',
         statics=statics,
+        deploy_kwargs={
+            'min_summa': 0,
+            'max_summa': 50,
+        },
+
     )
 
     txs = await fetch_recent_transactions(deploy_timestamp)
@@ -138,7 +151,7 @@ async def test_blank_deploy_correct_times(
 
 @pytest.mark.asyncio
 async def test_blank_setcode(create_and_deploy, contract_code_hash,
-    contract_code, fetch_recent_transactions
+    contract_code, fetch_recent_transactions, contract_code_depth,
 ):
     blank = Blank()
 
@@ -158,23 +171,27 @@ async def test_blank_setcode(create_and_deploy, contract_code_hash,
         os.path.join(os.path.dirname(os.path.dirname(__file__)), './Solidity'),
         'Blank',
         statics=statics,
+        deploy_kwargs={
+            'min_summa': 0,
+            'max_summa': 50,
+        },
     )
     assert not error
 
     from_giver_code_hash = await contract_code_hash(CONTRACTS_BASE_DIR, 'FromGiver.tvc')
-
+    from_giver_code_depth = await contract_code_depth(CONTRACTS_BASE_DIR, 'FromGiver.tvc')
     kwd_pool_code_hash = await contract_code_hash(CONTRACTS_BASE_DIR, 'KWDPool.tvc')
+    kwd_pool_code_depth = await contract_code_depth(CONTRACTS_BASE_DIR, 'KWDPool.tvc')
 
     fund_code = await contract_code(CONTRACTS_BASE_DIR, 'PseudoFund.tvc')
 
     before_set_from_giver_code = int(time.time())
 
-    await blank.setFromGiverCode(from_giver_code_hash)
+    await blank.setFromGiverCode(from_giver_code_hash, from_giver_code_depth)
 
     txs = await fetch_recent_transactions(deploy_timestamp)
     tx = txs[-1]
-    if expected_error:
-        assert tx['compute']['success'] == True
+    assert tx['compute']['success'] == True
 
 
 @pytest.mark.asyncio
@@ -201,6 +218,10 @@ async def test_blank_finalize(
         os.path.join(os.path.dirname(os.path.dirname(__file__)), './Solidity'),
         'Blank',
         statics=statics,
+        deploy_kwargs={
+            'min_summa': 0,
+            'max_summa': 50,
+        },
     )
     assert not error
 
@@ -211,4 +232,49 @@ async def test_blank_finalize(
 
     txs = await fetch_recent_transactions(deploy_timestamp)
     for tx in txs:
+        assert tx['compute']['success'] == True
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('min_summa,max_summa,expected_error', [
+    (0, 0, False),
+    (0, 100, False),
+    (100, 0, True),
+    (100, 100, False),
+])
+async def test_blank_minmax_summa(
+    create_and_deploy, fetch_recent_transactions,
+    min_summa, max_summa, expected_error,
+):
+    blank = Blank()
+
+    now = int(time.time())  # seconds
+
+    statics = {
+        'lock_time_': now + 10,
+        'unlock_time_': now + 100,
+        'farm_rate_': 1,
+        'kwf_lock_time_': now + 1000,
+        'quant_': 1,
+        'nonce_': 0,
+    }
+
+    error, deploy_timestamp = await create_and_deploy(
+        blank,
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), './Solidity'),
+        'Blank',
+        statics=statics,
+        deploy_kwargs={
+            'min_summa': min_summa,
+            'max_summa': max_summa,
+        },
+    )
+
+    txs = await fetch_recent_transactions(deploy_timestamp)
+    assert len(txs) == 1
+    tx = txs[-1]
+    if expected_error:
+        assert tx['compute']['success'] == False
+        assert tx['compute']['exit_code'] == ERRORS.error_max_summa_less_min
+    else:
         assert tx['compute']['success'] == True

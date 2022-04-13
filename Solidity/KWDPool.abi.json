@@ -17,7 +17,7 @@
 				{"name":"lock_time","type":"uint32"},
 				{"name":"unlock_time","type":"uint32"},
 				{"name":"quant","type":"uint128"},
-				{"name":"rate","type":"uint8"},
+				{"name":"rate","type":"uint16"},
 				{"name":"kwf_lock_time","type":"uint32"}
 			],
 			"outputs": [
@@ -120,6 +120,14 @@
 			"outputs": [
 				{"name":"value0","type":"bool"}
 			]
+		},
+		{
+			"name": "getKWD_MIN_BALANCE",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
 		}
 	],
 	"data": [
@@ -143,7 +151,7 @@
 		{"name":"fund_ready_flag_","type":"bool"},
 		{"name":"init_time_","type":"uint32"},
 		{"name":"deposit_time_","type":"uint32"},
-		{"name":"farm_rate_","type":"uint8"},
+		{"name":"farm_rate_","type":"uint16"},
 		{"name":"kwf_lock_time_","type":"uint32"},
 		{"name":"initialized_","type":"bool"},
 		{"name":"voting_bitmap_","type":"uint256"}

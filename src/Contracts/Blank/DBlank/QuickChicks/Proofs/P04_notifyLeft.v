@@ -1,5 +1,5 @@
-Require Import Coq.Program.Basics. 
-Require Import Coq.Strings.String. 
+Require Import Coq.Program.Basics.
+Require Import Coq.Strings.String.
 Require Import Setoid.
 Require Import ZArith.
 Require Import Psatz.
@@ -65,55 +65,7 @@ Require Import DBlank.QuickChicks.QCEnvironment.
 Require Import DBlank.QuickChicks.Props.
 Require Import UMLang.ExecGenerator.
 
-Lemma isErrorEq : forall {R b} (cr : ControlResult R b),
-  CommonQCEnvironment.isError cr <-> isError cr = true.
-Proof. unfold isError, CommonQCEnvironment.isError. destruct cr; intuition. Defined.
-
-Ltac leftmost_or t :=
-  let rec tt := fun t =>
-  match t with
-  | ?A \/ _ => tt A
-  | ?A => A
-  end in tt constr:(t).
-
-Lemma elim_left_absurd : forall P : Prop,
-  true = false \/ P <-> P.
-Proof.
-  intros P. split; intros H.
-  - destruct H as [H|H]. discriminate H. apply H.
-  - right. apply H.
-Defined.
-
-Definition leibniz_eqb {A} `{XBoolEquable bool A} :=
-  forall (a b : A), Common.eqb a b = true <-> a = b.
-
-Lemma messageSentTrivial : forall {A} `{inst : XBoolEquable bool A}
-  (msg : OutgoingMessage A)
-  (msgMap : queue (OutgoingMessage A))
-  (stateMap : mapping address (queue (OutgoingMessage A)))
-  (ind : address),
-  @leibniz_eqb _ inst ->
-  is_true (isMessageSent msg ind 0 (stateMap [ind] ← (hmapPush msg msgMap))).
-Admitted.
-
-Lemma insert_find : forall {K V} `{inst : XBoolEquable bool K} (spec : @leibniz_eqb _ inst)
-  (vd v : V) (k : K) (li : CommonInstances.listPair K V),
-  Common.hmapFindWithDefault vd k (xHMapInsert k v li) = v.
-Admitted.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Require Import Contracts.ProofsCommon.
 
 Section notifyLeft.
 Context (vbf :uint16) (eb: uint128) (pkin : uint256 ) (nonce : uint256)
@@ -398,7 +350,7 @@ Proof.
   repeat split; reflexivity.
 Defined. *)
 
-(* Lemma notifyLeft_exec_nocompute_proof : notifyLeft_exec_prop vbf eb pkin nonce balance adj_balance l.
+Lemma notifyLeft_exec_nocompute_proof : notifyLeft_exec_prop vbf eb pkin nonce balance adj_balance l.
 Proof.
   unfold notifyLeft_exec_prop. remember (exec_state _ l) as l'.
   intros Hnoreq. rewrite <- notifyLeft_exec_prf,
@@ -409,7 +361,7 @@ Proof.
 
   Set Printing Implicit.
 
-  unshelve epose proof (readerq_check_equiv l'' _) as [eq1 ].
+  (* unshelve epose proof (readerq_check_equiv l'' _) as [eq1 ].
   { rewrite Heql''. unfold XList. reflexivity. assumption. }
 
   match goal with H : l'' = exec_state _ (exec_state _ ?t) |- _ =>
@@ -433,7 +385,7 @@ Proof.
     match goal with |- {t | t = exec_state _ ?tt} => exists tt end.
     
   }
-  extract_eq as eq. rewrite <- eq in Heql''. clear eq.
+  extract_eq as eq. rewrite <- eq in Heql''. clear eq. *)
 
 
   destruct l eqn:eql. rewrite <- eql in *. repeat destruct p.
@@ -530,13 +482,13 @@ Proof.
   compute in Heql_sent.
 
   destruct vbf as [vbf0].
-  destruct (Common.eqb (N.land vbf0 (tvmFunc.uint2N MSG_VALUE_BUT_FEE)) 0) eqn:E1;
+  (* destruct (Common.eqb (N.land vbf0 (tvmFunc.uint2N MSG_VALUE_BUT_FEE)) 0) eqn:E1;
   destruct (Common.eqb (N.land vbf0 (tvmFunc.uint2N SEND_ALL_GAS)) 0) eqn:E2.
   
   all: rewrite Heql_sent in Heql'; compute in Heql'.
   all:cycle 1.
   all:cycle 1.
-  all:cycle 1.
+  all:cycle 1. *)
   repeat split.
   - rewrite Heql', Heql_sent. reflexivity.
   - destruct (Common.eqb (N.land vbf0 (tvmFunc.uint2N MSG_VALUE_BUT_FEE)) 0);
@@ -571,8 +523,8 @@ Proof.
   
     all: rewrite Heqmsg_stack, Heqmsg_state_sent;
     apply messageSentTrivial.
-Defined. *)
-
+Unshelve. all: let n := numgoals in guard n=0. Admitted.
+(* 
 Definition notifyLeft_explicit_exec :=
   let l' := exec_state (Uinterpreter (
     check_investor pkin nonce _ _ {{ return_ #{PhantomPoint} }})) l in
@@ -1132,7 +1084,7 @@ Proof.
   
     all: rewrite Heqmsg_stack, Heqmsg_state_sent;
     apply messageSentTrivial.
-Admitted.
+Admitted. *)
 
 Lemma notifyLeft_noexec_proof : notifyLeft_noexec_prop vbf eb pkin nonce balance adj_balance l.
 Proof.
@@ -1169,7 +1121,7 @@ Proof.
       subst l'; compute; reflexivity
     ]
   end. discriminate Hnoreq.
-Admitted.
+Unshelve. all: let n := numgoals in guard n=0. Admitted.
 
 (* proofs do not compute *)
 

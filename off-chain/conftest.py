@@ -7,6 +7,7 @@ import pytest
 from utils import client
 from utils import get_contract_code
 from utils import get_contract_code_hash
+from utils import get_contract_code_depth
 from utils import query_last_transactions
 from utils import send_tons_with_se_giver
 
@@ -77,10 +78,12 @@ def create_and_deploy(ever_client, send_crystals_se):
         *args,
         statics=None,
         deploy_crystals=10 ** 11,
+        deploy_kwargs=None,
         **kwargs,
     ):
         error = None
         timestamp_before_deploy = None
+        deploy_kwargs = deploy_kwargs or dict()
         try:
             await contract.create(
                 base_dir,
@@ -92,7 +95,7 @@ def create_and_deploy(ever_client, send_crystals_se):
             )
             await send_crystals_se(contract, deploy_crystals)
             timestamp_before_deploy = int(time.time())
-            await contract.deploy()
+            await contract.deploy(**deploy_kwargs)
         except Exception as e:
             error = e
         return error, timestamp_before_deploy
@@ -117,6 +120,16 @@ def contract_code_hash():
         )
 
     return _get_contract_code_hash
+
+
+@pytest.fixture
+def contract_code_depth():
+    async def _get_contract_code_depth(dirname, file_name):
+        return await get_contract_code_depth(
+            os.path.join(dirname, file_name)
+        )
+
+    return _get_contract_code_depth
 
 
 @pytest.fixture

@@ -18,27 +18,29 @@ class Blank(BasicContract):
             )
         )
 
-    async def deploy(self) -> None:
+    async def deploy(self, min_summa, max_summa) -> None:
         return await super().deploy(
             args=dict(
-                min_summa=0,
-                max_summa=100,
+                min_summa=min_summa,
+                max_summa=max_summa,
             )
         )
 
-    async def setFromGiverCode(self, code_hash):
+    async def setFromGiverCode(self, code_hash, code_depth):
         return await self._call_method(
             method='setFromGiverCodeHash',
             args={
                 'code_hash': code_hash,
+                'code_depth': code_depth,
             }
         )
 
-    async def setKWDPoolCodeHash(self, code_hash):
+    async def setKWDPoolCodeHash(self, code_hash, code_depth):
         return await self._call_method(
             method='setKWDPoolCodeHash',
             args={
                 'code_hash': code_hash,
+                'code_depth': code_depth,
             }
         )
 

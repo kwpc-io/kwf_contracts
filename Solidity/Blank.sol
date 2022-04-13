@@ -26,7 +26,7 @@ uint128 public max_summa_;
 //      bool    fund_ready_;
 uint32  public static lock_time_;
 uint32  public static unlock_time_;
-uint8   public static farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
+uint16  public static farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
 uint32  public static kwf_lock_time_ ;  /* time when we can unlock kwf or duration in days, set by fund? */
 uint128 public static quant_ ;
 uint256 public static nonce_;
@@ -107,7 +107,7 @@ constructor (uint128 min_summa , uint128 max_summa) public check_owner
   require(min_summa <= max_summa , KWErrors.error_max_summa_less_min);
   require(lock_time_ /* +  KWMessages.MIN_VOTING_TIME + KWMessages.TIME_FOR_SETCODE_PREPARE + KWMessages.TIME_FOR_FUNDS_COLLECTING */  < unlock_time_ , KWErrors.error_unlock_time_less_lock );
   require(quant_ > 0 , KWErrors.error_quant_not_set );
-  require(farm_rate_ > 0 && farm_rate_  <= 100, KWErrors.error_rate_not_set );
+  require(farm_rate_ > 0 && farm_rate_  <= KWMessages.MAX_FARM_RATE, KWErrors.error_rate_not_set );
   require(kwf_lock_time_ > 0 , KWErrors.error_kwf_lock_time_not_set );
   tvm.accept();
 
@@ -170,8 +170,8 @@ function isFundReady (uint256 pk , uint256 nonce ) external override check_inves
 
 function notifyLeft ( uint256 pk , uint256 nonce , uint128 balance, uint128 adj_balance) external override check_investor(pk , nonce)
 {
-  require(address(this).balance >= KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
-  require(now < lock_time_ , KWErrors.error_time_too_late);
+  /* require(address(this).balance >= msg.value + KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low); */
+  /* require(now < lock_time_ , KWErrors.error_time_too_late); */
   tvm.accept() ;
 
   investors_adj_summa_ += adj_balance ;
@@ -186,6 +186,7 @@ function deployFromGiver (TvmCell code , address giver, uint256 nonce) external 
   require(now < lock_time_   , KWErrors.error_time_too_late);
   require(!giver.isStdZero() , KWErrors.error_giver_not_set );
   require(tvm.hash (code) == fromgiver_code_hash_ , KWErrors.error_not_my_code );
+  require(code.depth() == fromgiver_code_depth_ , KWErrors.error_not_my_code );
   require(address(this).balance >= KWMessages.FG_MIN_BALANCE +
                                    2 * KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
   tvm.accept() ;
@@ -211,9 +212,9 @@ function acknowledgeDeploy (address giver, uint256 nonce) external override chec
 
 function notifyRight (address giver , uint256 nonce, uint128 balance , uint128 income ) external override check_giver (giver, nonce)
 {
-  require(address(this).balance >= KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
-  require(now < lock_time_ , KWErrors.error_time_too_late);
-  tvm.accept () ;
+  /* require(address(this).balance >= KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
+  require(now < lock_time_ , KWErrors.error_time_too_late);*/
+  tvm.accept () ; 
   givers_summa_ += income;
         balance = balance ; /* only for warning! */
   msg.sender.transfer(0 , false , KWMessages.MSG_VALUE_BUT_FEE_FLAGS ) ;
@@ -235,7 +236,7 @@ function acknowledgeFinalizeRight (address giver, uint256 nonce, bool dead_giver
 
 function finalize (bool force_giveup, address addr) external view check_owner
 {
-   require (now >= lock_time_ && now <= unlock_time_ , KWErrors.error_time_not_inside);
+   require (now >= lock_time_ && now + KWMessages.TIME_FOR_FUNDS_COLLECTING + KWMessages.MIN_VOTING_TIME <= unlock_time_ , KWErrors.error_time_not_inside);
    require (address(this).balance >= KWMessages.GAS_FOR_PARTICIPANT_MESSAGE + KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
    /* require ( math.min(investors_summa_ , givers_summa_) >= min_summa_ , KWErrors.error_sum_too_small); */
    require (num_investors_received_ < num_investors_sent_ , KWErrors.error_already_all_ack ) ;
@@ -256,10 +257,12 @@ function finalizeVoting () internal
   uint128 n = voted_against_;
   uint128 t = investors_summa_;
 
-  if (y >= 1 + (t/10) + ((n*((t/2)-(t/10)))/(t/2)))
+  voting_result_.set(y >= 1 + (t/10) + ((n*((t/2)-(t/10)))/(t/2)));
+
+  /* if (y >= 1 + (t/10) + ((n*((t/2)-(t/10)))/(t/2)))
       { voting_result_.set(true);  }
   else
-      { voting_result_.set(false); }
+      { voting_result_.set(false); } */
 
   voting_id_ ++;
 }
@@ -288,7 +291,7 @@ function setFundCode (TvmCell code) external check_owner
 
    TvmBuilder static_builder;
    static_builder.store(tvm.pubkey(), lock_time_, unlock_time_, farm_rate_, kwf_lock_time_, quant_, nonce_);
-   //32+32+8+32+128+256
+   //32+32+16+32+128+256
 
    main_builder.storeRef(dyn_builder);
    main_builder.storeRef(static_builder);
@@ -310,6 +313,8 @@ function tryEarlyComplete () internal
 function vote (uint256 pk , uint256 nonce, bool choice, uint128 sum, uint8 voting_id, uint256 code_hash) external override check_investor (pk , nonce)
 {
   require(msg.value >= KWMessages.VOTING_FEE, KWErrors.voting_fee_too_low);
+
+  tvm.accept();
 
   if ( voting_result_.hasValue() )
       { IKWFundParticipant (msg.sender).onVoteReject
@@ -338,10 +343,14 @@ function vote (uint256 pk , uint256 nonce, bool choice, uint128 sum, uint8 votin
 
 function startVoting (uint32 voting_time, uint256 code_hash) external check_owner
 {
+  require(address(this).balance >= KWMessages.VOTING_FEE + KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
   require(voting_time >= KWMessages.MIN_VOTING_TIME, KWErrors.voting_time_too_low);
   require(now >= lock_time_ , KWErrors.error_time_too_early);
-  require(now + voting_time + KWMessages.TIME_FOR_SETCODE_PREPARE + KWMessages.TIME_FOR_FUNDS_COLLECTING < unlock_time_, KWErrors.voting_time_too_long);
+  require(now + voting_time + 
+          KWMessages.TIME_FOR_SETCODE_PREPARE + 
+          KWMessages.TIME_FOR_FUNDS_COLLECTING < unlock_time_, KWErrors.voting_time_too_long);
   require(num_investors_received_ >= num_investors_sent_ , KWErrors.error_not_all_ack);
+  require(voting_id_ < 255);
  /*  require(canStartNewVoting (), KWErrors.new_voting_not_allowed); */
   tvm.accept();
 
@@ -394,6 +403,11 @@ function getInvestorsNumbers () public view returns(uint, uint)
 function getTimes () public view returns(uint256, uint256, uint256)
 {
   return (lock_time_, unlock_time_, kwf_lock_time_ );
+}
+
+function getKWD_MIN_BALANCE () public pure returns(uint128)
+{
+  return (KWMessages.KWD_MIN_BALANCE + KWMessages.GAS_FOR_FUND_MESSAGE);
 }
 
 

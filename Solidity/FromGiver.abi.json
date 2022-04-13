@@ -18,7 +18,7 @@
 				{"name":"value0","type":"uint32"},
 				{"name":"value1","type":"uint32"},
 				{"name":"value2","type":"uint128"},
-				{"name":"value3","type":"uint8"},
+				{"name":"value3","type":"uint16"},
 				{"name":"value4","type":"uint32"}
 			],
 			"outputs": [

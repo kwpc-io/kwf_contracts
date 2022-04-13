@@ -45,7 +45,7 @@ constructor(uint32 lock_time, uint32 unlock_time) public check_fund
 function initialize (uint32 /* lock_time */, 
                      uint32 /* unlock_time */, 
                      uint128 /* quant */,
-                     uint8 /* rate */,
+                     uint16 /* rate */,
                      uint32 /* kwf_lock_time */) external override 
 {
   revert (KWErrors.error_cant_initialize) ;

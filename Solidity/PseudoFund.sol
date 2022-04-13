@@ -28,7 +28,7 @@ contract DPseudoFund is IKWFund {
   //      bool    fund_ready_;
   uint32  public lock_time_;
   uint32  public unlock_time_;
-  uint8   public farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
+  uint16  public farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
   uint32  public kwf_lock_time_ ;  /* time when we can unlock kwf or duration in days, set by fund? */
   uint128 public quant_ ;
   uint256 public nonce_;
@@ -124,7 +124,7 @@ function onCodeUpgrade(TvmCell data_cell) private  {
   TvmSlice s2 = s.loadRefAsSlice();
   uint256 oldPubkey;
   (oldPubkey, lock_time_,    unlock_time_,    farm_rate_,    kwf_lock_time_,    quant_,    nonce_)=
-      s2.decode(uint256, uint32, uint32, uint8, uint32, uint128, uint256);
+      s2.decode(uint256, uint32, uint32, uint16, uint32, uint128, uint256);
 
   tvm.setPubkey(oldPubkey);
 

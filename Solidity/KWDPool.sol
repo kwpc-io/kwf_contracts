@@ -23,7 +23,7 @@ bool fund_ready_flag_;  /* flag that fund is ready by both legs */
 uint32 init_time_; /* time when we are initialized */
 uint32 deposit_time_; /* time when deposit arrived */
 
-uint8 farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
+uint16 farm_rate_ ; /* the rate in percents which determines the realtion between legs, set by fund */
 uint32 kwf_lock_time_ ;  /* time when we can unlock kwf or duration in days, set by fund? */
 
 bool initialized_ ; /* flag that we are initalized by Fund */
@@ -76,7 +76,7 @@ constructor (optional (address) final_address) public check_owner
 /* callback */function initialize (uint32 lock_time,
                      uint32 unlock_time,
                      uint128 quant,
-                     uint8 rate,
+                     uint16 rate,
                      uint32 kwf_lock_time) external override check_fund
 {
   require ( ! initialized_ , KWErrors.error_initialized ) ;
@@ -85,6 +85,11 @@ constructor (optional (address) final_address) public check_owner
   require ( quant > 0 , KWErrors.error_quant_not_set );
   require ( rate > 0 && rate  <= 100, KWErrors.error_rate_not_set );
   require ( kwf_lock_time > 0 , KWErrors.error_kwf_lock_time_not_set ); */
+
+  /* if (now >= lock_time) {
+    selfdestruct ( final_address_.get() ) ;
+  } */
+  
   tvm.accept () ;
 
   quant_ = quant;
@@ -156,7 +161,7 @@ else {
 
 function setFinalAddress (address final_address) external check_init check_owner
 {
-  require (address(this).balance >= balance_ + KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
+  require (address(this).balance >= balance_ + 4*KWMessages.EPSILON_BALANCE , KWErrors.error_balance_too_low);
   tvm.accept();
   final_address_.set(final_address) ;
 }
@@ -195,8 +200,6 @@ function packParams (TvmCell code) internal view returns (TvmCell)
   selfdestruct ( final_address_.get() ) ;
 }
 
-
-
 function sendFunds (TvmCell code ) external override check_init  check_fund
 {
   require ( fund_ready_flag_ , KWErrors.error_fund_ready_not_set);
@@ -208,8 +211,8 @@ function sendFunds (TvmCell code ) external override check_init  check_fund
 
   /* make a named call with params */
   /* balance_ = 0;  */
-
-  IKWFund (fund_address_).sendKWDPoolParams{value: balance_ + msg.value, bounce: true, flag: 1 } (tvm.pubkey(), nonce_, packParams (code) ) ;
+  uint128 val = address(this).balance - KWMessages.EPSILON_BALANCE;
+  IKWFund (fund_address_).sendKWDPoolParams{value: /* balance_ + msg.value */ val, bounce: true, flag: 1 } (tvm.pubkey(), nonce_, packParams (code) ) ;
 }
 
 function returnFunds (/*uint128 sum ,*/ address address_to) external check_owner
@@ -225,17 +228,16 @@ function returnFunds (/*uint128 sum ,*/ address address_to) external check_owner
 
 function returnExtraFunds (address address_to) external view check_owner
 {
+  require (address(this).balance > balance_ + KWMessages.KWD_MIN_BALANCE, KWErrors.error_balance_too_low);
   tvm.accept () ;
+
   uint128 delta = address(this).balance - balance_ - KWMessages.KWD_MIN_BALANCE;
-  if (delta > KWMessages.EPSILON_BALANCE)
-  {
-    address_to.transfer( delta , true , 1 ) ;
-  }
+  address_to.transfer( delta , true , 1 ) ;
 }
 
 function vote (bool choice, uint8 voting_id, uint256 code_hash) external check_init check_owner
 {
-  require (address(this).balance >= KWMessages.VOTING_FEE + 2*KWMessages.EPSILON_BALANCE, KWErrors.error_balance_too_low) ;
+  require (address(this).balance >= balance_ + KWMessages.VOTING_FEE + 3*KWMessages.EPSILON_BALANCE, KWErrors.error_balance_too_low) ;
   require (voting_bitmap_ & (uint256(1) << voting_id) == 0, KWErrors.error_already_voted);
   tvm.accept();
 
@@ -267,5 +269,11 @@ function isFundReady () public view returns(bool)
 {
   return fund_ready_flag_;
 }
+
+function getKWD_MIN_BALANCE () public pure returns(uint128)
+{
+  return (KWMessages.KWD_MIN_BALANCE + KWMessages.GAS_FOR_FUND_MESSAGE);
+}
+
 
 }

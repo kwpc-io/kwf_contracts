@@ -203,7 +203,7 @@ unfold_mod.
   refine u.
 Defined. 
 Arguments check_owner  {_} {_}.
-
+Print tvm_transfer.
 Definition killBlank_ (address_to :  address  ): external PhantomType true .
   refine (check_owner  _) .
   refine {{ require_((#{address_to} != tvm_myaddr()), KWErrors.error_return_address_is_mine) ; { _ } }}. 
